@@ -48,7 +48,8 @@ for modifier in $MODIFIERS compile-environment; do
   MOZCONFIG_CONTENT+="$NEWLINE"
 done
 
-OBJDIR="$CHECKOUT/obj$IDENTIFIER"
+WORKTREE_NAME="$(basename "$CHECKOUT")"
+OBJDIR="$HOME/src/firefox-obj/$WORKTREE_NAME/obj$IDENTIFIER"
 MOZCONFIG_CONTENT+="mk_add_options MOZ_OBJDIR=$OBJDIR"
 echo "$MOZCONFIG_CONTENT" > "$CHECKOUT/.mozconfig$IDENTIFIER"
 if [ -f "$CHECKOUT/.mozconfig" ]; then
