@@ -48,8 +48,12 @@ for modifier in $MODIFIERS compile-environment; do
   MOZCONFIG_CONTENT+="$NEWLINE"
 done
 
-WORKTREE_NAME="$(basename "$CHECKOUT")"
-OBJDIR="$HOME/firefox/firefox-obj/$WORKTREE_NAME/obj$IDENTIFIER"
+# Objdir lives inside the checkout (named obj-*) so that symlinked moz-extension:
+# resources (e.g. the generated webcompat run.js background script) resolve to a
+# path under the source tree. An external objdir makes nsFileChannel rewrite the
+# symlinked script's URI to a file:// outside the extension, which gets blocked
+# and breaks about:compat. CrashPlan: exclude */obj-*/* once to skip all objdirs.
+OBJDIR="$CHECKOUT/obj$IDENTIFIER"
 MOZCONFIG_CONTENT+="mk_add_options MOZ_OBJDIR=$OBJDIR"
 echo "$MOZCONFIG_CONTENT" > "$CHECKOUT/.mozconfig$IDENTIFIER"
 if [ -f "$CHECKOUT/.mozconfig" ]; then

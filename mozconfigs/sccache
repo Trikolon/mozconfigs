@@ -1,5 +1,6 @@
-SCCACHE_PATH="$MOZBUILD/sccache/sccache"
-if command -v cygpath >/dev/null; then
-  SCCACHE_PATH="$(cygpath -w $SCCACHE_PATH)"
-fi
-ac_add_options --with-ccache=$SCCACHE_PATH
+# Pass the bare name rather than an absolute path. configure only wires sccache
+# into its toolchain bootstrap when CCACHE is exactly "sccache" (see the
+# bootstrap_search_path gate in build/moz.configure/toolchain.configure); an
+# absolute path silently opts out, so the binary stays frozen at whatever
+# version was installed first while every other toolchain keeps updating.
+ac_add_options --with-ccache=sccache
